@@ -10,4 +10,9 @@ var person = {
         DSD: "S"
     }
 };
-console.log(JSON.stringify(person));
+//console.log(JSON.stringify(person));
+function return_person(){
+    return JSON.stringify(person);
+}
+
+module.exports = return_person;
