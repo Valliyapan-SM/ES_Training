@@ -1,7 +1,8 @@
-const cp = require('child_process')
+
+const {execFile} = require('child_process')
 
 function runScript(resource) {
-    const child = cp.execFile('./' + resource, (err,stdout) => {
+    execFile('./' + resource, (err,stdout) => {
         if(err){
             console.log("Error : ",err)
         }
@@ -12,3 +13,6 @@ function runScript(resource) {
 }
 
 runScript('runme.sh')
+
+module.exports = runScript;
+
