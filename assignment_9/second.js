@@ -21,23 +21,25 @@ spawn
 
 //const {spawn} = require('child_process')
 
-var child = cp.spawn('echo',["Hello","world"], {shell: true})
+function myspawn(){
+  var child1 = cp.spawn('echo',["Hello","world"], {shell: true})
 
-child.stdout.on('data', (data) => {
-  console.log(data.toString())
-})
+  child1.stdout.on('data', (data) => {
+    console.log("Data : ",data.toString())
+  })
 
-child.on('exit', (status) =>{
-  console.log("at exit ",status)
-})
+  child1.on('exit', (status) =>{
+    console.log("at exit ",status)
+  })
 
-child.on('error', (err) => {
-  console.log("Error : err")
-})
+  child1.on('error', (err) => {
+    console.log("Error : ",err)
+  })
 
-child.on('close', (status) => {
-  console.log(status)
-}) 
+  child1.on('close', (status) => {
+    console.log("Status : ",status)
+  }) 
+}
 
 /*
 
@@ -49,13 +51,16 @@ fork
 
 */
 
-child = cp.fork('child.js')
+function myfork(){
+  var child2 = cp.fork('child.js')
 
-child.on('message', (data) => {
-  console.log("Child : ", data)
-})
+  child2.on('message', (data) => {
+    console.log("Child : ", data)
+  })
 
-child.send("Message to child")
+  child2.send("Message to child")
+}
+
 
 /*
 
@@ -66,15 +71,23 @@ exec()
 
 */
 
-child = cp.exec("echo hello world", (err,out,stder) => {
-  if(err){
-    console.log("Error - ",err)
-  }
-  else{
-    console.log("Output : ",out)
-    if(stder != "") console.error("stderror - ",stder)
-  }
-})
+function myexec(){
+  cp.exec("echo hello world", (err,out,stder) => {
+    if(err){
+      console.log("Error - ",err)
+      return err
+    }
+    else{
+      if(stder != ""){
+        console.error("stderror - ",stder)
+        return stder
+      }
+      console.log("Output : ",out)
+      return out
+    }
+  })
+}
+
 
 /*
 
@@ -86,9 +99,21 @@ execFile()
 */
 
 
-child = cp.execFile('node',['http.js'],{shell: true},(err,stdout) => {
-  if(err) console.log("Error - ",err)
-  else{
-    console.log(stdout)
-  }
-})
+function myexecFile(){
+  cp.execFile('node',['http.js'],{shell: true},(err,stdout) => {
+    if(err) {
+      console.log("Error - ",err)
+      return err
+    }
+    else{
+      console.log(stdout)
+      return stdout
+    }
+  })
+}
+
+myspawn()
+myfork()
+myexec()
+myexecFile()
+
